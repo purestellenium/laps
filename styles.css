@@ -29,3 +29,81 @@ html {
   padding: 0;
   background-color: #0c0c0f;
 }
+
+.line {
+  position: fixed;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.line.top,
+.line.bottom {
+  height: 1px;
+  left: 240px;
+  right: 240px;
+  background-color: var(--accent-dim);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.line.left,
+.line.right {
+  width: 1px;
+  top: 33px;
+  bottom: 33px;
+  background: var(--accent-dim);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+/* the below animations are AI-generated! */
+@keyframes wipeX {
+  0% {
+    transform: scaleX(0);
+  } /* invisible, collapsed */
+  80% {
+    transform: scaleX(1);
+    filter: brightness(1);
+  } /* line finishes drawing */
+  88% {
+    filter: brightness(2.8);
+  } /* the flash pop */
+  100% {
+    transform: scaleX(1);
+    filter: brightness(1);
+  } /* settles */
+}
+
+@keyframes wipeY {
+  0% {
+    transform: scaleY(0);
+  } /* invisible, collapsed */
+  80% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  } /* line finishes drawing */
+  88% {
+    filter: brightness(2.8);
+  } /* the flash pop */
+  100% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  } /* settles */
+}
+
+.line.top {
+  top: 29px;
+  animation: wipeX 0.6s var(--ease) 0.1s forwards;
+}
+.line.right {
+  right: 236px;
+  animation: wipeY 0.6s var(--ease) 0.28s forwards;
+}
+.line.bottom {
+  bottom: 29px;
+  animation: wipeX 0.6s var(--ease) 0.46s forwards;
+}
+.line.left {
+  left: 236px;
+  animation: wipeY 0.6s var(--ease) 0.64s forwards;
+}
