@@ -423,7 +423,7 @@ body::before {
   color: var(--accent);
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.035em;
 }
 
 .panel h1 {
