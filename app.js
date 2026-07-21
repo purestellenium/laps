@@ -1,3 +1,13 @@
+// keep intro elements non-interactive until they've animated on-screen.
+// the stage's fade-in is the last thing to finish; a timeout backstops it
+// in case the animation never fires (e.g. reduced motion).
+const revealGate = () => document.body.classList.add("ready");
+const stageForGate = document.querySelector(".stage");
+if (stageForGate) {
+  stageForGate.addEventListener("animationend", revealGate, { once: true });
+}
+setTimeout(revealGate, 2200);
+
 // tab switching with direction-aware sliding panels
 const tabs = [...document.querySelectorAll(".tabs a")];
 const panels = [...document.querySelectorAll(".panel")];
@@ -15,12 +25,13 @@ tabs.forEach((tab, i) => {
   });
 });
 
-function switchTo(next) {
+function switchTo(next, forcedDir) {
   animating = true;
 
   // direction: moving to a later tab slides content in from the right (+1),
-  // an earlier tab slides in from the left (-1)
-  const dir = next > current ? 1 : -1;
+  // an earlier tab slides in from the left (-1). the footer arrows pass an
+  // explicit direction so wrap-around still slides the intuitive way.
+  const dir = forcedDir ?? (next > current ? 1 : -1);
   const incoming = byTab(tabs[next].dataset.tab);
   const outgoing = byTab(tabs[current].dataset.tab);
 
@@ -55,4 +66,61 @@ function switchTo(next) {
     outgoing.style.transition = "";
     animating = false;
   }, SLIDE_MS + 20);
+}
+
+// footer arrows step through the tabs (wrapping around at the ends)
+document.querySelectorAll(".tab-arrow").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (animating) return;
+    const dir = Number(btn.dataset.dir);
+    const next = (current + dir + tabs.length) % tabs.length;
+    switchTo(next, dir);
+  });
+});
+
+// show the SHA of the actually-deployed commit (written by build.js at deploy)
+const shaEl = document.getElementById("commit-sha");
+if (shaEl) {
+  fetch("/commit.json", { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then(({ sha }) => {
+      if (!sha || sha === "unknown") throw new Error("no sha");
+      shaEl.textContent = sha.slice(0, 7);
+      shaEl.href = `https://github.com/purestellenium/laps/commit/${sha}`;
+    })
+    .catch(() => {
+      shaEl.textContent = "unknown";
+    });
+}
+
+// click the email to copy it (with brackets) to the clipboard
+const copyEmail = document.querySelector(".copy-email");
+if (copyEmail) {
+  const label = copyEmail.dataset.copy;
+  let resetTimer;
+
+  copyEmail.addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(label);
+    } catch {
+      // fallback for insecure contexts / older browsers
+      const ta = document.createElement("textarea");
+      ta.value = label;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+
+    copyEmail.textContent = "copied!";
+    copyEmail.classList.add("copied");
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+      copyEmail.textContent = label;
+      copyEmail.classList.remove("copied");
+    }, 1400);
+  });
 }

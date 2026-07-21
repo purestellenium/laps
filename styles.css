@@ -20,6 +20,9 @@
   --header-top: 29px;
   --header-h: 58px;
   --frame-top: 99px; /* header-top + header-h + 12px gap */
+  --footer-bottom: 29px;
+  --footer-h: 58px; /* same as the header */
+  --frame-bottom: 99px; /* footer-bottom + footer-h + 12px gap */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -39,6 +42,31 @@ html {
   margin: 0;
   padding: 0;
   background-color: #0c0c0f;
+}
+
+body {
+  margin: 0;
+}
+
+/* nothing that animates in is interactive until the intro has finished.
+   the .panel rule outweighs .panel.active until body.ready, so sliding
+   panels only become clickable once the stage has revealed. */
+body:not(.ready) .topbar,
+body:not(.ready) .botbar,
+body:not(.ready) .stage,
+body:not(.ready) .panel {
+  pointer-events: none;
+}
+
+/* grid lives on its own fixed layer so it stays anchored to the
+   viewport and never moves with trackpad overscroll */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-color: #0c0c0f;
   background-size: 40px 40px;
   background-image:
     linear-gradient(to right, var(--accent-wash) 1px, transparent 1px),
@@ -53,7 +81,7 @@ html {
   position: fixed;
   z-index: -1;
   top: var(--frame-top);
-  bottom: 29px;
+  bottom: var(--frame-bottom);
   left: 236px;
   right: 236px;
   background-color: var(--bg);
@@ -79,7 +107,7 @@ html {
 .line.right {
   width: 1px;
   top: calc(var(--frame-top) + 4px);
-  bottom: 33px;
+  bottom: calc(var(--frame-bottom) + 4px);
   background: var(--accent-dim);
   transform: scaleY(0);
   transform-origin: top;
@@ -144,13 +172,13 @@ html {
   border-right: 1px solid;
 }
 .corner.bl {
-  bottom: 29px;
+  bottom: var(--frame-bottom);
   left: 236px;
   border-bottom: 1px solid;
   border-left: 1px solid;
 }
 .corner.br {
-  bottom: 29px;
+  bottom: var(--frame-bottom);
   right: 236px;
   border-bottom: 1px solid;
   border-right: 1px solid;
@@ -182,7 +210,7 @@ html {
   animation: wipeY 0.6s var(--ease) 0.28s forwards;
 }
 .line.bottom {
-  bottom: 29px;
+  bottom: var(--frame-bottom);
   animation: wipeX 0.6s var(--ease) 0.46s forwards;
 }
 .line.left {
@@ -214,6 +242,94 @@ html {
   0% {
     opacity: 0;
     transform: translateY(-6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* footer — its own outlined frame below the main frame */
+.botbar {
+  position: fixed;
+  z-index: 40;
+  bottom: var(--footer-bottom);
+  left: var(--edge);
+  right: var(--edge);
+  height: var(--footer-h);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border: 1px solid var(--accent-dim);
+  background-color: var(--bg);
+  color: var(--dim);
+  font-size: 13px;
+  opacity: 0;
+  animation: footerIn 0.6s var(--ease) 1.4s forwards;
+}
+
+.botbar a {
+  color: var(--dim);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+.botbar a:hover {
+  color: var(--accent-bright);
+}
+
+.botbar .sep {
+  margin: 0 4px;
+  color: var(--faint);
+}
+
+.botbar .commit {
+  color: var(--faint);
+}
+
+.botbar .commit:hover {
+  color: var(--accent-bright);
+}
+
+.tab-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.tab-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--accent-dim);
+  background: none;
+  color: var(--dim);
+  cursor: pointer;
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+
+.tab-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tab-arrow:hover {
+  color: var(--accent-bright);
+  border-color: var(--accent);
+  background-color: var(--accent-wash);
+}
+
+@keyframes footerIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
   }
   100% {
     opacity: 1;
@@ -274,7 +390,7 @@ html {
   position: fixed;
   z-index: 10;
   top: var(--frame-top);
-  bottom: 29px;
+  bottom: var(--frame-bottom);
   left: var(--edge);
   right: var(--edge);
   overflow: hidden;
@@ -306,6 +422,7 @@ html {
   margin: 0 0 20px;
   color: var(--accent);
   font-size: 13px;
+  font-weight: 600;
   letter-spacing: 0.08em;
 }
 
@@ -323,6 +440,148 @@ html {
   color: var(--dim);
   font-size: 16px;
   line-height: 1.6;
+}
+
+/* home hero — text left, framed square portrait right */
+.home-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 56px;
+}
+
+.home-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.home-text h1 {
+  white-space: nowrap;
+}
+
+.pfp {
+  position: relative;
+  flex: 0 0 auto;
+  width: 220px;
+  height: 220px;
+  margin: 0;
+}
+
+.pfp img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pfp-corner {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+}
+
+.pfp-corner.tl {
+  top: -14px;
+  left: -14px;
+  border-top: 1px solid var(--accent);
+  border-left: 1px solid var(--accent);
+}
+
+/* about section — paragraph left, social links right */
+.about {
+  display: flex;
+  gap: 42px;
+  margin-top: 44px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.about-body {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.about-body p:not(.eyebrow) {
+  margin: 0;
+  max-width: 74ch;
+  color: var(--dim);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* inline prose links */
+.panel p a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-dim);
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.panel p a:hover {
+  color: var(--accent-bright);
+  border-color: var(--accent);
+}
+
+.socials {
+  flex: 0 0 auto;
+  width: 210px;
+}
+
+.socials ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.socials li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: var(--dim);
+  font-size: 14px;
+}
+
+.socials li span {
+  font-size: 14px;
+}
+
+.socials .icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  color: var(--faint);
+  transition: color 0.2s var(--ease);
+}
+
+.socials li:has(a:hover) .icon {
+  color: var(--accent-bright);
+}
+
+.copy-email.copied {
+  color: var(--accent);
+}
+
+.socials a {
+  position: relative;
+  color: var(--dim);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+.socials a:hover {
+  color: var(--accent-bright);
+}
+
+.pfp-corner.br {
+  bottom: -14px;
+  right: -14px;
+  border-bottom: 1px solid var(--accent);
+  border-right: 1px solid var(--accent);
 }
 
 .index-list {
