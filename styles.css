@@ -28,6 +28,24 @@ html {
   margin: 0;
   padding: 0;
   background-color: #0c0c0f;
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, var(--accent-wash) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--accent-wash) 1px, transparent 1px);
+}
+
+.frame {
+  background-color: #0c0c0f;
+}
+
+.frame-fill {
+  position: fixed;
+  z-index: -1;
+  top: 29px;
+  bottom: 29px;
+  left: 236px;
+  right: 236px;
+  background-color: var(--bg);
 }
 
 .line {
