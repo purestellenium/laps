@@ -16,6 +16,17 @@
   --accent-ink: #1a1428;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --maxw: 900px;
+  --edge: 236px;
+  --header-top: 29px;
+  --header-h: 58px;
+  --frame-top: 99px; /* header-top + header-h + 12px gap */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(*) {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* some of the above variables were ai genned */
@@ -41,7 +52,7 @@ html {
 .frame-fill {
   position: fixed;
   z-index: -1;
-  top: 29px;
+  top: var(--frame-top);
   bottom: 29px;
   left: 236px;
   right: 236px;
@@ -67,7 +78,7 @@ html {
 .line.left,
 .line.right {
   width: 1px;
-  top: 33px;
+  top: calc(var(--frame-top) + 4px);
   bottom: 33px;
   background: var(--accent-dim);
   transform: scaleY(0);
@@ -121,13 +132,13 @@ html {
   animation: cornerFlash 0.5s ease-out 0.82s forwards;
 }
 .corner.tl {
-  top: 29px;
+  top: var(--frame-top);
   left: 236px;
   border-top: 1px solid;
   border-left: 1px solid;
 }
 .corner.tr {
-  top: 29px;
+  top: var(--frame-top);
   right: 236px;
   border-top: 1px solid;
   border-right: 1px solid;
@@ -163,7 +174,7 @@ html {
 /* human again! */
 
 .line.top {
-  top: 29px;
+  top: var(--frame-top);
   animation: wipeX 0.6s var(--ease) 0.1s forwards;
 }
 .line.right {
@@ -177,4 +188,177 @@ html {
 .line.left {
   left: 236px;
   animation: wipeY 0.6s var(--ease) 0.64s forwards;
+}
+
+/* header — its own outlined frame above the main frame */
+.topbar {
+  position: fixed;
+  z-index: 40;
+  top: var(--header-top);
+  left: var(--edge);
+  right: var(--edge);
+  height: var(--header-h);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border: 1px solid var(--accent-dim);
+  background-color: var(--bg);
+  opacity: 0;
+  /* wait for the main frame to finish drawing (~1.3s) before revealing */
+  animation: headerIn 0.6s var(--ease) 1.4s forwards;
+}
+
+@keyframes headerIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.brand {
+  color: var(--text);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.brand-accent {
+  color: var(--accent);
+}
+
+.tabs {
+  display: flex;
+  gap: 30px;
+}
+
+.tabs a {
+  position: relative;
+  color: var(--dim);
+  font-size: 15px;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color 0.2s var(--ease);
+}
+
+.tabs a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 1px;
+  background-color: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s var(--ease);
+}
+
+.tabs a:hover,
+.tabs a.active {
+  color: var(--accent-bright);
+}
+
+.tabs a:hover::after,
+.tabs a.active::after {
+  transform: scaleX(1);
+}
+
+/* content stage — clips the sliding panels inside the main frame */
+.stage {
+  position: fixed;
+  z-index: 10;
+  top: var(--frame-top);
+  bottom: 29px;
+  left: var(--edge);
+  right: var(--edge);
+  overflow: hidden;
+  opacity: 0;
+  animation: headerIn 0.6s var(--ease) 1.4s forwards;
+}
+
+.panel {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  padding: 56px 64px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.5s var(--ease),
+    opacity 0.5s var(--ease);
+}
+
+.panel.active {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.eyebrow {
+  margin: 0 0 20px;
+  color: var(--accent);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.panel h1 {
+  margin: 0 0 18px;
+  color: var(--text);
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.lead {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--dim);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.index-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.index-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.index-list li:first-child {
+  border-top: 1px solid var(--line-soft);
+}
+
+.index-list .idx {
+  flex: 0 0 auto;
+  min-width: 56px;
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.index-list .name {
+  flex: 0 0 auto;
+  min-width: 180px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.index-list .desc {
+  color: var(--dim);
+  font-size: 14px;
 }

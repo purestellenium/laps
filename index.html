@@ -3,8 +3,82 @@
   <head>
     <title>stelle.codes</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/x-icon" href="/stelle-dizzy.png" />
   </head>
   <body>
+    <header class="topbar">
+      <span class="brand">stelle<span class="brand-accent">.</span>codes</span>
+      <nav class="tabs">
+        <a href="#" class="active" data-tab="home">home</a>
+        <a href="#" data-tab="projects">projects</a>
+        <a href="#" data-tab="blog">blog</a>
+        <a href="#" data-tab="links">links</a>
+      </nav>
+    </header>
+    <main class="stage">
+      <section class="panel active" data-tab="home">
+        <p class="eyebrow">// home</p>
+        <h1>stelle<span class="brand-accent">.</span>codes</h1>
+        <p class="lead">
+          building precise, considered software — working at the edge of
+          interface and systems.
+        </p>
+      </section>
+
+      <section class="panel" data-tab="projects">
+        <p class="eyebrow">// projects</p>
+        <ul class="index-list">
+          <li>
+            <span class="idx">01</span>
+            <span class="name">laps</span>
+            <span class="desc">a minimal personal site framework</span>
+          </li>
+          <li>
+            <span class="idx">02</span>
+            <span class="name">frame</span>
+            <span class="desc">animated blueprint-style layout primitives</span>
+          </li>
+          <li>
+            <span class="idx">03</span>
+            <span class="name">mono</span>
+            <span class="desc">a monospace design language study</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="panel" data-tab="blog">
+        <p class="eyebrow">// blog</p>
+        <ul class="index-list">
+          <li>
+            <span class="idx">2026.07</span>
+            <span class="name">on drawing frames</span>
+            <span class="desc">staged reveals and precise motion</span>
+          </li>
+          <li>
+            <span class="idx">2026.05</span>
+            <span class="name">monospace as a system</span>
+            <span class="desc">why fixed-width shapes intent</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="panel" data-tab="links">
+        <p class="eyebrow">// links</p>
+        <ul class="index-list">
+          <li>
+            <span class="idx">→</span>
+            <span class="name">github</span>
+            <span class="desc">github.com/purestellenium</span>
+          </li>
+          <li>
+            <span class="idx">→</span>
+            <span class="name">email</span>
+            <span class="desc">hi@stelle.codes</span>
+          </li>
+        </ul>
+      </section>
+    </main>
+
     <div class="frame" aria-hidden="true">
       <span class="frame-fill" aria-hidden="true"></span>
       <span class="line top"></span>
@@ -16,5 +90,6 @@
       <span class="corner bl"></span>
       <span class="corner br"></span>
     </div>
+    <script src="app.js"></script>
   </body>
 </html>
