@@ -627,6 +627,34 @@ a.name:hover {
   color: var(--accent-bright);
 }
 
+/* links tab — 88x31 button wall */
+.buttons-eyebrow {
+  margin-top: 40px;
+}
+
+.buttons-note {
+  margin: 0 0 16px;
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.button-wall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.button-wall a {
+  display: block;
+  line-height: 0;
+}
+
+.button-wall img {
+  display: block;
+  width: 88px;
+  height: 31px;
+}
+
 /* coming-soon placeholder (e.g. blog) */
 .coming-soon {
   display: flex;

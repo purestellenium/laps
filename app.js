@@ -93,13 +93,14 @@ if (shaEl) {
     });
 }
 
-// click the email to copy it (with brackets) to the clipboard
-const copyEmail = document.querySelector(".copy-email");
-if (copyEmail) {
-  const label = copyEmail.dataset.copy;
+// click any email link to copy it (with brackets) to the clipboard.
+// there can be more than one (home + links tab), each restoring its own text.
+document.querySelectorAll(".copy-email").forEach((el) => {
+  const label = el.dataset.copy;
+  const original = el.textContent.trim();
   let resetTimer;
 
-  copyEmail.addEventListener("click", async (e) => {
+  el.addEventListener("click", async (e) => {
     e.preventDefault();
     try {
       await navigator.clipboard.writeText(label);
@@ -115,12 +116,12 @@ if (copyEmail) {
       ta.remove();
     }
 
-    copyEmail.textContent = "copied!";
-    copyEmail.classList.add("copied");
+    el.textContent = "copied!";
+    el.classList.add("copied");
     clearTimeout(resetTimer);
     resetTimer = setTimeout(() => {
-      copyEmail.textContent = label;
-      copyEmail.classList.remove("copied");
+      el.textContent = original;
+      el.classList.remove("copied");
     }, 1400);
   });
-}
+});
