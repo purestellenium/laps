@@ -617,6 +617,72 @@ body::before {
   font-weight: 600;
 }
 
+/* linked names (e.g. projects) keep the plain look, accent on hover */
+a.name {
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+a.name:hover {
+  color: var(--accent-bright);
+}
+
+/* coming-soon placeholder (e.g. blog) */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 260px;
+  text-align: center;
+}
+
+.coming-soon-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.coming-soon-sub {
+  margin: 0;
+  color: var(--faint);
+  font-size: 14px;
+}
+
+/* per-project actions: live demo + source, pushed to the right edge */
+.index-list .actions {
+  display: flex;
+  align-self: center;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+  padding-left: 20px;
+}
+
+.action {
+  display: inline-flex;
+  color: var(--faint);
+  transition: color 0.2s var(--ease);
+}
+
+.action:hover {
+  color: var(--accent-bright);
+}
+
+.action-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+/* a live link with no href yet is hidden until you fill it in */
+a.action[href=""] {
+  display: none;
+}
+
 .index-list .desc {
   color: var(--dim);
   font-size: 14px;
