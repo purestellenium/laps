@@ -17,6 +17,16 @@ const SLIDE_MS = 500;
 let current = 0; // index of the active tab
 let animating = false;
 
+// restore the tab from the url hash so a refresh doesn't bounce back to home
+const hashTab = tabs.findIndex((t) => t.dataset.tab === location.hash.slice(1));
+if (hashTab > 0) {
+  tabs[current].classList.remove("active");
+  panels[current].classList.remove("active");
+  current = hashTab;
+  tabs[current].classList.add("active");
+  panels[current].classList.add("active");
+}
+
 tabs.forEach((tab, i) => {
   tab.addEventListener("click", (e) => {
     e.preventDefault();
@@ -56,6 +66,9 @@ function switchTo(next, forcedDir) {
   tabs[current].classList.remove("active");
   tabs[next].classList.add("active");
   current = next;
+
+  // keep the url in sync so a refresh lands back on this tab
+  history.replaceState(null, "", `#${tabs[next].dataset.tab}`);
 
   // reset the outgoing panel once it has left the stage
   setTimeout(() => {
