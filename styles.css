@@ -609,6 +609,11 @@ body::before {
   font-size: 13px;
 }
 
+/* the → markers on the links tab read bigger */
+[data-tab="links"] .index-list .idx {
+  font-size: 17px;
+}
+
 .index-list .name {
   flex: 0 0 auto;
   min-width: 180px;
