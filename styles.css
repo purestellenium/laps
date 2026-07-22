@@ -32,7 +32,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :global(*) {
+  * {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }
@@ -759,8 +759,20 @@ a.action[href=""] {
   font-size: clamp(13px, calc(6.6px + 0.4vw), 16px);
 }
 
+.blog-list,
+.blog-post {
+  transition:
+    opacity 0.22s var(--ease),
+    transform 0.22s var(--ease);
+}
+
+.blog-fade-out {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
 .blog-post-body {
-  max-width: 68ch;
+  max-width: 100%;
   color: var(--dim);
   font-size: clamp(14px, calc(6px + 0.5vw), 19px);
   line-height: 1.7;
