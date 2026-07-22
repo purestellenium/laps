@@ -1,0 +1,14 @@
+{
+  "name": "laps",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "marked": "^18.0.7"
+  }
+}

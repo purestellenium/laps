@@ -17,8 +17,11 @@ const SLIDE_MS = 500;
 let current = 0; // index of the active tab
 let animating = false;
 
-// restore the tab from the url hash so a refresh doesn't bounce back to home
-const hashTab = tabs.findIndex((t) => t.dataset.tab === location.hash.slice(1));
+// restore the tab from the url hash so a refresh doesn't bounce back to home.
+// blog posts extend the hash to "blog/<slug>" (handled below, once posts.json
+// has loaded), so only the part before the "/" identifies the tab here.
+const [hashTabName] = location.hash.slice(1).split("/");
+const hashTab = tabs.findIndex((t) => t.dataset.tab === hashTabName);
 if (hashTab > 0) {
   tabs[current].classList.remove("active");
   panels[current].classList.remove("active");
@@ -30,8 +33,16 @@ if (hashTab > 0) {
 tabs.forEach((tab, i) => {
   tab.addEventListener("click", (e) => {
     e.preventDefault();
+    const isBlogTab = tab.dataset.tab === "blog";
+    // clicking "blog" while already there (even mid-post) resets to the list,
+    // same as clicking a site's logo resets to its homepage
+    if (isBlogTab && i === current) {
+      showBlogList();
+      return;
+    }
     if (animating || i === current) return;
     switchTo(i);
+    if (isBlogTab) showBlogList();
   });
 });
 
@@ -88,6 +99,7 @@ document.querySelectorAll(".tab-arrow").forEach((btn) => {
     const dir = Number(btn.dataset.dir);
     const next = (current + dir + tabs.length) % tabs.length;
     switchTo(next, dir);
+    if (tabs[next].dataset.tab === "blog") showBlogList();
   });
 });
 
@@ -138,3 +150,93 @@ document.querySelectorAll(".copy-email").forEach((el) => {
     }, 1400);
   });
 });
+
+// blog: fetch the manifest build.js generates from posts/*.md, render a list
+// in the blog tab, and swap to a single post's rendered HTML on click. posts
+// are pre-rendered at build time, so no markdown parsing happens here.
+const blogListEl = document.getElementById("blog-list");
+const blogPostEl = document.getElementById("blog-post");
+const blogTitleEl = blogPostEl?.querySelector(".blog-post-title");
+const blogMetaEl = blogPostEl?.querySelector(".blog-post-meta");
+const blogBodyEl = blogPostEl?.querySelector(".blog-post-body");
+const blogBackEl = blogPostEl?.querySelector(".blog-back");
+
+let posts = [];
+
+function formatPostDate(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function renderBlogList() {
+  if (!blogListEl) return;
+  if (!posts.length) {
+    blogListEl.innerHTML = `
+      <div class="coming-soon">
+        <p class="coming-soon-title">no posts yet</p>
+        <p class="coming-soon-sub">check back soon.</p>
+      </div>`;
+    return;
+  }
+  blogListEl.innerHTML = `<ul class="index-list">${posts
+    .map(
+      (post, i) => `
+      <li>
+        <span class="idx">${String(i + 1).padStart(2, "0")}</span>
+        <a class="name" href="#blog/${post.slug}" data-slug="${post.slug}">${post.title}</a>
+        <span class="desc">${formatPostDate(post.date)} · ${post.readingMinutes} min read</span>
+      </li>`,
+    )
+    .join("")}</ul>`;
+}
+
+function showBlogList() {
+  if (blogListEl) blogListEl.hidden = false;
+  if (blogPostEl) blogPostEl.hidden = true;
+  history.replaceState(null, "", "#blog");
+}
+
+function showBlogPost(slug) {
+  const post = posts.find((p) => p.slug === slug);
+  if (!post) {
+    showBlogList();
+    return;
+  }
+  blogTitleEl.textContent = post.title;
+  blogMetaEl.textContent = `${formatPostDate(post.date)} · ${post.readingMinutes} min read`;
+  blogBodyEl.innerHTML = post.html;
+  if (blogListEl) blogListEl.hidden = true;
+  blogPostEl.hidden = false;
+  history.replaceState(null, "", `#blog/${slug}`);
+}
+
+// event delegation: the list's <a> tags are (re)built by renderBlogList, so
+// one listener on the container covers all of them
+blogListEl?.addEventListener("click", (e) => {
+  const link = e.target.closest("a[data-slug]");
+  if (!link) return;
+  e.preventDefault();
+  showBlogPost(link.dataset.slug);
+});
+
+blogBackEl?.addEventListener("click", (e) => {
+  e.preventDefault();
+  showBlogList();
+});
+
+fetch("/posts.json", { cache: "no-store" })
+  .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+  .then((data) => {
+    posts = data;
+    renderBlogList();
+    // a direct link to a post (e.g. #blog/some-post) opens straight to it
+    const [tabName, slug] = location.hash.slice(1).split("/");
+    if (tabName === "blog" && slug) showBlogPost(slug);
+  })
+  .catch(() => {
+    renderBlogList(); // falls back to the "no posts yet" empty state
+  });

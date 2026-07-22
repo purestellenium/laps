@@ -13,7 +13,7 @@ This isn't to say there are no good projects coming to YSWSes anymore. In fact, 
 
 ## what is AI slop?
 
-To address AI slop, we must first define what it is. Originally, this blog post was meant to do that: figure out what counts as too much AI usage and what is not. I put out a question in my personal channel [#maxs-cozy-planet](https://hackclub.enterprise.slack.com/archives/C0AL1T3CZ2S) on Slack, which sparked an extremely active thread of discussion, some of which was extremely funny, but ultimately went nowhere. We failed to arrive at any consensus.
+To address AI slop, we must first define what it is. Originally, this blog post was meant to do that: figure out what counts as too much AI usage and what is not. I put out a question in my personal channel [#stelles-cozy-planet](https://hackclub.enterprise.slack.com/archives/C0AL1T3CZ2S) on Slack, which sparked an extremely active thread of discussion, some of which was extremely funny, but ultimately went nowhere. We failed to arrive at any consensus.
 
 ![A Slack message from me asking "When is it moral to submit projects using AI to YSWSes? When is something "too much AI"?"](images/slack-q-toomuchai.png)
 ![A Slack message from @Rohan saying "I think Ai is fine aslong as it’s Claude"](images/aslong-as-its-claude.png)

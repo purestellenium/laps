@@ -728,6 +728,146 @@ a.action[href=""] {
   font-size: clamp(14px, calc(6px + 0.5vw), 19px);
 }
 
+/* blog — post list reuses .index-list as-is; this is just the single-post
+   view (title/meta/back link) and typography for its rendered markdown */
+.blog-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: clamp(24px, calc(8px + 1vw), 32px);
+  color: var(--dim);
+  font-size: clamp(13px, calc(6.6px + 0.4vw), 16px);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+.blog-back:hover {
+  color: var(--accent-bright);
+}
+
+.blog-post-title {
+  margin: 0 0 clamp(10px, calc(2px + 0.6vw), 16px);
+  color: var(--text);
+  font-size: clamp(28px, calc(9.6px + 1.2vw), 40px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.blog-post-meta {
+  margin: 0 0 clamp(28px, calc(8px + 1.4vw), 40px);
+  color: var(--faint);
+  font-size: clamp(13px, calc(6.6px + 0.4vw), 16px);
+}
+
+.blog-post-body {
+  max-width: 68ch;
+  color: var(--dim);
+  font-size: clamp(14px, calc(6px + 0.5vw), 19px);
+  line-height: 1.7;
+}
+
+.blog-post-body p {
+  margin: 0 0 20px;
+}
+
+.blog-post-body h2 {
+  margin: clamp(32px, calc(10px + 1.4vw), 44px) 0 14px;
+  color: var(--text);
+  font-size: clamp(21px, calc(7.2px + 0.9vw), 28px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.blog-post-body h3 {
+  margin: clamp(24px, calc(8px + 1vw), 32px) 0 12px;
+  color: var(--text);
+  font-size: clamp(17px, calc(6.4px + 0.6vw), 22px);
+  font-weight: 700;
+}
+
+.blog-post-body ul,
+.blog-post-body ol {
+  margin: 0 0 20px;
+  padding-left: 1.4em;
+}
+
+.blog-post-body li {
+  margin-bottom: 8px;
+}
+
+.blog-post-body a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-dim);
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.blog-post-body a:hover {
+  color: var(--accent-bright);
+  border-color: var(--accent);
+}
+
+.blog-post-body strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.blog-post-body del {
+  color: var(--faint);
+}
+
+.blog-post-body blockquote {
+  margin: 20px 0;
+  padding: clamp(12px, calc(4px + 0.6vw), 18px)
+    clamp(16px, calc(6.4px + 0.6vw), 22px);
+  border-left: 3px solid var(--accent-dim);
+  background-color: var(--accent-wash);
+}
+
+.blog-post-body blockquote p {
+  margin: 0;
+}
+
+.blog-post-body blockquote p + p {
+  margin-top: 12px;
+}
+
+.blog-post-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+}
+
+.blog-post-body code {
+  padding: 2px 6px;
+  background-color: var(--raised);
+  color: var(--accent-bright);
+  font-size: 0.9em;
+}
+
+.blog-post-body pre {
+  margin: 0 0 20px;
+  padding: clamp(14px, calc(4px + 0.8vw), 20px);
+  overflow-x: auto;
+  background-color: var(--raised-2);
+  border: 1px solid var(--line);
+}
+
+.blog-post-body pre code {
+  padding: 0;
+  background: none;
+}
+
+.blog-post-body hr {
+  margin: clamp(28px, calc(8px + 1.4vw), 40px) 0;
+  border: none;
+  border-top: 1px solid var(--line-soft);
+}
+
 /* mobile breakpoint — the desktop layout assumes a windowed chrome with
    room for a horizontal nav and side-by-side rows, neither of which fit
    a phone-width viewport, so this switches to a stacked single-column
