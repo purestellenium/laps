@@ -21,10 +21,14 @@
   --edge: clamp(16px, calc((100vw - 800px) / 2), 236px);
   --header-top: 29px;
   --header-h: 58px;
-  --frame-top: 99px; /* header-top + header-h + 12px gap */
+  --frame-top: calc(
+    var(--header-top) + var(--header-h) + 12px
+  ); /* gap below header */
   --footer-bottom: 29px;
   --footer-h: 58px; /* same as the header */
-  --frame-bottom: 99px; /* footer-bottom + footer-h + 12px gap */
+  --frame-bottom: calc(
+    var(--footer-bottom) + var(--footer-h) + 12px
+  ); /* gap above footer */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -232,7 +236,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 clamp(24px, calc(-14.4px + 2.4vw), 48px);
   border: 1px solid var(--accent-dim);
   background-color: var(--bg);
   opacity: 0;
@@ -263,7 +267,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 clamp(24px, calc(-14.4px + 2.4vw), 48px);
   border: 1px solid var(--accent-dim);
   background-color: var(--bg);
   color: var(--dim);
@@ -722,4 +726,101 @@ a.action[href=""] {
 .index-list .desc {
   color: var(--dim);
   font-size: clamp(14px, calc(6px + 0.5vw), 19px);
+}
+
+/* mobile breakpoint — the desktop layout assumes a windowed chrome with
+   room for a horizontal nav and side-by-side rows, neither of which fit
+   a phone-width viewport, so this switches to a stacked single-column
+   layout instead of just shrinking the same layout further */
+@media (max-width: 700px) {
+  :root {
+    --header-top: 16px;
+    --header-h: 88px; /* two stacked rows: brand, then tabs */
+    --footer-bottom: 16px;
+    --footer-h: 56px; /* single row now that the arrows are hidden */
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 18px 20px;
+  }
+
+  .botbar {
+    justify-content: center;
+    padding: 18px 20px;
+  }
+
+  .tabs {
+    gap: 16px;
+  }
+
+  /* tapping a tab label already switches tabs on mobile, so the
+     prev/next arrows are redundant and just eat footer space */
+  .tab-nav {
+    display: none;
+  }
+
+  .home-row {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* image first, text below, even though the markup keeps the
+     heading first for reading order */
+  .pfp {
+    order: -1;
+    width: clamp(140px, 45vw, 200px);
+    height: clamp(140px, 45vw, 200px);
+  }
+
+  .home-text {
+    text-align: center;
+  }
+
+  .home-text > .eyebrow {
+    display: none;
+  }
+
+  .home-text h1 {
+    white-space: normal;
+  }
+
+  .about {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .socials {
+    width: 100%;
+  }
+
+  /* index rows: idx+name on one line, desc wraps to its own full-width
+     line below, actions (live/source icons) sit right-aligned under that */
+  .index-list li {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .index-list .idx {
+    min-width: 40px;
+  }
+
+  .index-list .name {
+    min-width: 140px;
+  }
+
+  .index-list .desc {
+    flex-basis: 100%;
+  }
+
+  .index-list .actions {
+    padding-left: 0;
+  }
+
+  .panel {
+    padding: 32px 20px;
+  }
 }
