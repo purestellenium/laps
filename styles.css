@@ -16,7 +16,9 @@
   --accent-ink: #1a1428;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --maxw: 900px;
-  --edge: 236px;
+  /* shrinks below ~1272px viewport width so the frame chrome never
+     squeezes the content area under 800px; holds at 236px above that */
+  --edge: clamp(16px, calc((100vw - 800px) / 2), 236px);
   --header-top: 29px;
   --header-h: 58px;
   --frame-top: 99px; /* header-top + header-h + 12px gap */
@@ -82,8 +84,8 @@ body::before {
   z-index: -1;
   top: var(--frame-top);
   bottom: var(--frame-bottom);
-  left: 236px;
-  right: 236px;
+  left: var(--edge);
+  right: var(--edge);
   background-color: var(--bg);
 }
 
@@ -96,8 +98,8 @@ body::before {
 .line.top,
 .line.bottom {
   height: 1px;
-  left: 240px;
-  right: 240px;
+  left: calc(var(--edge) + 4px);
+  right: calc(var(--edge) + 4px);
   background-color: var(--accent-dim);
   transform: scaleX(0);
   transform-origin: left;
@@ -161,25 +163,25 @@ body::before {
 }
 .corner.tl {
   top: var(--frame-top);
-  left: 236px;
+  left: var(--edge);
   border-top: 1px solid;
   border-left: 1px solid;
 }
 .corner.tr {
   top: var(--frame-top);
-  right: 236px;
+  right: var(--edge);
   border-top: 1px solid;
   border-right: 1px solid;
 }
 .corner.bl {
   bottom: var(--frame-bottom);
-  left: 236px;
+  left: var(--edge);
   border-bottom: 1px solid;
   border-left: 1px solid;
 }
 .corner.br {
   bottom: var(--frame-bottom);
-  right: 236px;
+  right: var(--edge);
   border-bottom: 1px solid;
   border-right: 1px solid;
 }
@@ -206,7 +208,7 @@ body::before {
   animation: wipeX 0.6s var(--ease) 0.1s forwards;
 }
 .line.right {
-  right: 236px;
+  right: var(--edge);
   animation: wipeY 0.6s var(--ease) 0.28s forwards;
 }
 .line.bottom {
@@ -214,7 +216,7 @@ body::before {
   animation: wipeX 0.6s var(--ease) 0.46s forwards;
 }
 .line.left {
-  left: 236px;
+  left: var(--edge);
   animation: wipeY 0.6s var(--ease) 0.64s forwards;
 }
 
@@ -265,7 +267,7 @@ body::before {
   border: 1px solid var(--accent-dim);
   background-color: var(--bg);
   color: var(--dim);
-  font-size: 13px;
+  font-size: clamp(13px, calc(5px + 0.5vw), 18px);
   opacity: 0;
   animation: footerIn 0.6s var(--ease) 1.4s forwards;
 }
@@ -302,8 +304,8 @@ body::before {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: clamp(32px, calc(16px + 1vw), 42px);
+  height: clamp(32px, calc(16px + 1vw), 42px);
   padding: 0;
   border: 1px solid var(--accent-dim);
   background: none;
@@ -316,8 +318,8 @@ body::before {
 }
 
 .tab-arrow svg {
-  width: 16px;
-  height: 16px;
+  width: clamp(16px, calc(6.4px + 0.6vw), 22px);
+  height: clamp(16px, calc(6.4px + 0.6vw), 22px);
 }
 
 .tab-arrow:hover {
@@ -339,7 +341,7 @@ body::before {
 
 .brand {
   color: var(--text);
-  font-size: 19px;
+  font-size: clamp(19px, calc(7.8px + 0.7vw), 26px);
   font-weight: 600;
   letter-spacing: 0.02em;
 }
@@ -350,13 +352,13 @@ body::before {
 
 .tabs {
   display: flex;
-  gap: 30px;
+  gap: clamp(30px, calc(10.8px + 1.2vw), 42px);
 }
 
 .tabs a {
   position: relative;
   color: var(--dim);
-  font-size: 15px;
+  font-size: clamp(15px, calc(7px + 0.5vw), 20px);
   text-decoration: none;
   letter-spacing: 0.01em;
   transition: color 0.2s var(--ease);
@@ -402,7 +404,8 @@ body::before {
   position: absolute;
   inset: 0;
   box-sizing: border-box;
-  padding: 56px 64px;
+  padding: clamp(56px, calc(-1.6px + 3.6vw), 92px)
+    clamp(64px, calc(6.4px + 3.6vw), 100px);
   overflow-y: auto;
   transform: translateX(100%);
   opacity: 0;
@@ -419,17 +422,17 @@ body::before {
 }
 
 .eyebrow {
-  margin: 0 0 20px;
+  margin: 0 0 clamp(20px, calc(4px + 1vw), 30px);
   color: var(--accent);
-  font-size: 13px;
+  font-size: clamp(13px, calc(6.6px + 0.4vw), 17px);
   font-weight: 600;
   letter-spacing: 0.035em;
 }
 
 .panel h1 {
-  margin: 0 0 18px;
+  margin: 0 0 clamp(18px, calc(2px + 1vw), 28px);
   color: var(--text);
-  font-size: 40px;
+  font-size: clamp(40px, calc(11.2px + 1.8vw), 58px);
   font-weight: 700;
   letter-spacing: 0.01em;
 }
@@ -438,7 +441,7 @@ body::before {
   margin: 0;
   max-width: 52ch;
   color: var(--dim);
-  font-size: 16px;
+  font-size: clamp(16px, calc(8px + 0.5vw), 21px);
   line-height: 1.6;
 }
 
@@ -447,7 +450,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 56px;
+  gap: clamp(56px, calc(17.6px + 2.4vw), 80px);
 }
 
 .home-text {
@@ -462,8 +465,8 @@ body::before {
 .pfp {
   position: relative;
   flex: 0 0 auto;
-  width: 220px;
-  height: 220px;
+  width: clamp(220px, calc(60px + 10vw), 320px);
+  height: clamp(220px, calc(60px + 10vw), 320px);
   margin: 0;
 }
 
@@ -476,8 +479,8 @@ body::before {
 
 .pfp-corner {
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: clamp(50px, calc(21.2px + 1.8vw), 68px);
+  height: clamp(50px, calc(21.2px + 1.8vw), 68px);
   pointer-events: none;
 }
 
@@ -491,22 +494,22 @@ body::before {
 /* about section — paragraph left, social links right */
 .about {
   display: flex;
-  gap: 42px;
-  margin-top: 44px;
-  padding-top: 40px;
+  gap: clamp(42px, calc(6.8px + 2.2vw), 64px);
+  margin-top: clamp(44px, calc(12px + 2vw), 64px);
+  padding-top: clamp(40px, calc(11.2px + 1.8vw), 58px);
   border-top: 1px solid var(--line-soft);
 }
 
 .about-body {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
 .about-body p:not(.eyebrow) {
   margin: 0;
-  max-width: 74ch;
+  max-width: 100%;
   color: var(--dim);
-  font-size: 14px;
+  font-size: clamp(14px, calc(6px + 0.5vw), 19px);
   line-height: 1.7;
 }
 
@@ -527,7 +530,7 @@ body::before {
 
 .socials {
   flex: 0 0 auto;
-  width: 210px;
+  width: clamp(210px, calc(82px + 8vw), 290px);
 }
 
 .socials ul {
@@ -539,20 +542,20 @@ body::before {
 .socials li {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: clamp(8px, calc(1.6px + 0.4vw), 12px);
+  margin-bottom: clamp(10px, calc(3.6px + 0.4vw), 14px);
   color: var(--dim);
-  font-size: 14px;
+  font-size: clamp(14px, calc(6px + 0.5vw), 19px);
 }
 
 .socials li span {
-  font-size: 14px;
+  font-size: clamp(14px, calc(6px + 0.5vw), 19px);
 }
 
 .socials .icon {
   flex: 0 0 auto;
-  width: 18px;
-  height: 18px;
+  width: clamp(18px, calc(8.4px + 0.6vw), 24px);
+  height: clamp(18px, calc(8.4px + 0.6vw), 24px);
   color: var(--faint);
   transition: color 0.2s var(--ease);
 }
@@ -568,7 +571,7 @@ body::before {
 .socials a {
   position: relative;
   color: var(--dim);
-  font-size: 14px;
+  font-size: clamp(14px, calc(6px + 0.5vw), 19px);
   text-decoration: none;
   transition: color 0.2s var(--ease);
 }
@@ -593,8 +596,8 @@ body::before {
 .index-list li {
   display: flex;
   align-items: baseline;
-  gap: 20px;
-  padding: 16px 0;
+  gap: clamp(20px, calc(4px + 1vw), 30px);
+  padding: clamp(16px, calc(6.4px + 0.6vw), 22px) 0;
   border-bottom: 1px solid var(--line-soft);
 }
 
@@ -604,21 +607,21 @@ body::before {
 
 .index-list .idx {
   flex: 0 0 auto;
-  min-width: 56px;
+  min-width: clamp(56px, calc(27.2px + 1.8vw), 74px);
   color: var(--faint);
-  font-size: 13px;
+  font-size: clamp(13px, calc(6.6px + 0.4vw), 17px);
 }
 
 /* the → markers on the links tab read bigger */
 [data-tab="links"] .index-list .idx {
-  font-size: 17px;
+  font-size: clamp(17px, calc(5.8px + 0.7vw), 24px);
 }
 
 .index-list .name {
   flex: 0 0 auto;
-  min-width: 180px;
+  min-width: clamp(180px, calc(68px + 7vw), 250px);
   color: var(--text);
-  font-size: 16px;
+  font-size: clamp(16px, calc(6.4px + 0.6vw), 22px);
   font-weight: 600;
 }
 
@@ -634,7 +637,7 @@ a.name:hover {
 
 /* links tab — 88x31 button wall */
 .buttons-eyebrow {
-  margin-top: 40px;
+  margin-top: clamp(40px, calc(8px + 2vw), 60px);
 }
 
 .buttons-note {
@@ -646,7 +649,7 @@ a.name:hover {
 .button-wall {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: clamp(10px, calc(0.4px + 0.6vw), 16px);
 }
 
 .button-wall a {
@@ -667,14 +670,14 @@ a.name:hover {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 260px;
+  min-height: clamp(260px, calc(36px + 14vw), 400px);
   text-align: center;
 }
 
 .coming-soon-title {
   margin: 0;
   color: var(--text);
-  font-size: 26px;
+  font-size: clamp(26px, calc(6.8px + 1.2vw), 38px);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
@@ -682,7 +685,7 @@ a.name:hover {
 .coming-soon-sub {
   margin: 0;
   color: var(--faint);
-  font-size: 14px;
+  font-size: clamp(14px, calc(6px + 0.5vw), 19px);
 }
 
 /* per-project actions: live demo + source, pushed to the right edge */
@@ -690,9 +693,9 @@ a.name:hover {
   display: flex;
   align-self: center;
   align-items: center;
-  gap: 14px;
+  gap: clamp(14px, calc(4.4px + 0.6vw), 20px);
   margin-left: auto;
-  padding-left: 20px;
+  padding-left: clamp(20px, calc(7.2px + 0.8vw), 28px);
 }
 
 .action {
@@ -707,8 +710,8 @@ a.name:hover {
 
 .action-icon {
   display: block;
-  width: 16px;
-  height: 16px;
+  width: clamp(16px, calc(6.4px + 0.6vw), 22px);
+  height: clamp(16px, calc(6.4px + 0.6vw), 22px);
 }
 
 /* a live link with no href yet is hidden until you fill it in */
@@ -718,5 +721,5 @@ a.action[href=""] {
 
 .index-list .desc {
   color: var(--dim);
-  font-size: 14px;
+  font-size: clamp(14px, calc(6px + 0.5vw), 19px);
 }
