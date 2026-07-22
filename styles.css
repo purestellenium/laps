@@ -20,12 +20,12 @@
      squeezes the content area under 800px; holds at 236px above that */
   --edge: clamp(16px, calc((100vw - 800px) / 2), 236px);
   --header-top: 29px;
-  --header-h: 58px;
+  --header-h: clamp(58px, calc(16.4px + 2.6vw), 84px);
   --frame-top: calc(
     var(--header-top) + var(--header-h) + 12px
   ); /* gap below header */
   --footer-bottom: 29px;
-  --footer-h: 58px; /* same as the header */
+  --footer-h: clamp(58px, calc(16.4px + 2.6vw), 84px); /* same as the header */
   --frame-bottom: calc(
     var(--footer-bottom) + var(--footer-h) + 12px
   ); /* gap above footer */
