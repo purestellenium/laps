@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
-
 :root {
   --bg: #0c0c0f;
   --raised: #141419;
@@ -16,19 +14,14 @@
   --accent-ink: #1a1428;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --maxw: 900px;
-  /* shrinks below ~1272px viewport width so the frame chrome never
-     squeezes the content area under 800px; holds at 236px above that */
-  --edge: clamp(16px, calc((100vw - 800px) / 2), 236px);
+
+  --edge: clamp(16px, calc((100vw - var(--maxw)) / 2), 236px);
   --header-top: 29px;
   --header-h: clamp(58px, calc(16.4px + 2.6vw), 84px);
-  --frame-top: calc(
-    var(--header-top) + var(--header-h) + 12px
-  ); /* gap below header */
+  --frame-top: calc(var(--header-top) + var(--header-h) + 12px);
   --footer-bottom: 29px;
-  --footer-h: clamp(58px, calc(16.4px + 2.6vw), 84px); /* same as the header */
-  --frame-bottom: calc(
-    var(--footer-bottom) + var(--footer-h) + 12px
-  ); /* gap above footer */
+  --footer-h: clamp(58px, calc(16.4px + 2.6vw), 84px);
+  --frame-bottom: calc(var(--footer-bottom) + var(--footer-h) + 12px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -37,8 +30,6 @@
     transition-duration: 0.01ms !important;
   }
 }
-
-/* some of the above variables were ai genned */
 
 * {
   font-family: "JetBrains Mono", "monospace";
@@ -54,9 +45,6 @@ body {
   margin: 0;
 }
 
-/* nothing that animates in is interactive until the intro has finished.
-   the .panel rule outweighs .panel.active until body.ready, so sliding
-   panels only become clickable once the stage has revealed. */
 body:not(.ready) .topbar,
 body:not(.ready) .botbar,
 body:not(.ready) .stage,
@@ -64,8 +52,6 @@ body:not(.ready) .panel {
   pointer-events: none;
 }
 
-/* grid lives on its own fixed layer so it stays anchored to the
-   viewport and never moves with trackpad overscroll */
 body::before {
   content: "";
   position: fixed;
@@ -119,39 +105,38 @@ body::before {
   transform-origin: top;
 }
 
-/* the below animations are AI-generated! */
 @keyframes wipeX {
   0% {
     transform: scaleX(0);
-  } /* invisible, collapsed */
+  }
   80% {
     transform: scaleX(1);
     filter: brightness(1);
-  } /* line finishes drawing */
+  }
   88% {
     filter: brightness(2.8);
-  } /* the flash pop */
+  }
   100% {
     transform: scaleX(1);
     filter: brightness(1);
-  } /* settles */
+  }
 }
 
 @keyframes wipeY {
   0% {
     transform: scaleY(0);
-  } /* invisible, collapsed */
+  }
   80% {
     transform: scaleY(1);
     filter: brightness(1);
-  } /* line finishes drawing */
+  }
   88% {
     filter: brightness(2.8);
-  } /* the flash pop */
+  }
   100% {
     transform: scaleY(1);
     filter: brightness(1);
-  } /* settles */
+  }
 }
 
 .corner {
@@ -205,8 +190,6 @@ body::before {
   }
 }
 
-/* human again! */
-
 .line.top {
   top: var(--frame-top);
   animation: wipeX 0.6s var(--ease) 0.1s forwards;
@@ -224,7 +207,6 @@ body::before {
   animation: wipeY 0.6s var(--ease) 0.64s forwards;
 }
 
-/* header — its own outlined frame above the main frame */
 .topbar {
   position: fixed;
   z-index: 40;
@@ -240,7 +222,7 @@ body::before {
   border: 1px solid var(--accent-dim);
   background-color: var(--bg);
   opacity: 0;
-  /* wait for the main frame to finish drawing (~1.3s) before revealing */
+
   animation: headerIn 0.6s var(--ease) 1.4s forwards;
 }
 
@@ -255,7 +237,6 @@ body::before {
   }
 }
 
-/* footer — its own outlined frame below the main frame */
 .botbar {
   position: fixed;
   z-index: 40;
@@ -391,7 +372,6 @@ body::before {
   transform: scaleX(1);
 }
 
-/* content stage — clips the sliding panels inside the main frame */
 .stage {
   position: fixed;
   z-index: 10;
@@ -449,7 +429,6 @@ body::before {
   line-height: 1.6;
 }
 
-/* home hero — text left, framed square portrait right */
 .home-row {
   display: flex;
   align-items: center;
@@ -495,7 +474,6 @@ body::before {
   border-left: 1px solid var(--accent);
 }
 
-/* about section — paragraph left, social links right */
 .about {
   display: flex;
   gap: clamp(42px, calc(6.8px + 2.2vw), 64px);
@@ -517,7 +495,6 @@ body::before {
   line-height: 1.7;
 }
 
-/* inline prose links */
 .panel p a {
   color: var(--accent);
   text-decoration: none;
@@ -616,7 +593,6 @@ body::before {
   font-size: clamp(13px, calc(6.6px + 0.4vw), 17px);
 }
 
-/* the → markers on the links tab read bigger */
 [data-tab="links"] .index-list .idx {
   font-size: clamp(17px, calc(5.8px + 0.7vw), 24px);
 }
@@ -629,7 +605,6 @@ body::before {
   font-weight: 600;
 }
 
-/* linked names (e.g. projects) keep the plain look, accent on hover */
 a.name {
   text-decoration: none;
   transition: color 0.2s var(--ease);
@@ -639,7 +614,6 @@ a.name:hover {
   color: var(--accent-bright);
 }
 
-/* links tab — 88x31 button wall */
 .buttons-eyebrow {
   margin-top: clamp(40px, calc(8px + 2vw), 60px);
 }
@@ -667,7 +641,6 @@ a.name:hover {
   height: 31px;
 }
 
-/* coming-soon placeholder (e.g. blog) */
 .coming-soon {
   display: flex;
   flex-direction: column;
@@ -692,7 +665,6 @@ a.name:hover {
   font-size: clamp(14px, calc(6px + 0.5vw), 19px);
 }
 
-/* per-project actions: live demo + source, pushed to the right edge */
 .index-list .actions {
   display: flex;
   align-self: center;
@@ -718,7 +690,6 @@ a.name:hover {
   height: clamp(16px, calc(6.4px + 0.6vw), 22px);
 }
 
-/* a live link with no href yet is hidden until you fill it in */
 a.action[href=""] {
   display: none;
 }
@@ -728,8 +699,6 @@ a.action[href=""] {
   font-size: clamp(14px, calc(6px + 0.5vw), 19px);
 }
 
-/* blog — post list reuses .index-list as-is; this is just the single-post
-   view (title/meta/back link) and typography for its rendered markdown */
 .blog-back {
   display: inline-flex;
   align-items: center;
@@ -880,16 +849,12 @@ a.action[href=""] {
   border-top: 1px solid var(--line-soft);
 }
 
-/* mobile breakpoint — the desktop layout assumes a windowed chrome with
-   room for a horizontal nav and side-by-side rows, neither of which fit
-   a phone-width viewport, so this switches to a stacked single-column
-   layout instead of just shrinking the same layout further */
-@media (max-width: 700px) {
+@media (max-width: 932px) {
   :root {
     --header-top: 16px;
-    --header-h: 88px; /* two stacked rows: brand, then tabs */
+    --header-h: 88px;
     --footer-bottom: 16px;
-    --footer-h: 56px; /* single row now that the arrows are hidden */
+    --footer-h: 56px;
   }
 
   .topbar {
@@ -909,8 +874,6 @@ a.action[href=""] {
     gap: 16px;
   }
 
-  /* tapping a tab label already switches tabs on mobile, so the
-     prev/next arrows are redundant and just eat footer space */
   .tab-nav {
     display: none;
   }
@@ -920,8 +883,6 @@ a.action[href=""] {
     gap: 40px;
   }
 
-  /* image first, text below, even though the markup keeps the
-     heading first for reading order */
   .pfp {
     order: -1;
     width: clamp(140px, 45vw, 200px);
@@ -949,8 +910,6 @@ a.action[href=""] {
     width: 100%;
   }
 
-  /* index rows: idx+name on one line, desc wraps to its own full-width
-     line below, actions (live/source icons) sit right-aligned under that */
   .index-list li {
     flex-wrap: wrap;
     row-gap: 10px;
