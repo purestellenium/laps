@@ -42,31 +42,42 @@ const postFiles = fs.existsSync(postsDir)
   ? fs.readdirSync(postsDir).filter((f) => f.endsWith(".md"))
   : [];
 
-const posts = postFiles.map((filename) => {
-  const raw = fs
-    .readFileSync(path.join(postsDir, filename), "utf8")
-    .replace(/\r\n/g, "\n");
-  const match = raw.match(FRONTMATTER_RE);
-  if (!match) {
-    throw new Error(`${filename}: missing --- frontmatter block`);
-  }
-  const [, frontmatterBlock, body] = match;
-  const { title, date } = parseFrontmatter(frontmatterBlock);
+let skippedDrafts = 0;
 
-  const html = marked
-    .parse(body)
-    .replace(/src="images\//g, 'src="/posts/images/');
+const posts = postFiles
+  .map((filename) => {
+    const raw = fs
+      .readFileSync(path.join(postsDir, filename), "utf8")
+      .replace(/\r\n/g, "\n");
+    const match = raw.match(FRONTMATTER_RE);
+    if (!match) {
+      throw new Error(`${filename}: missing --- frontmatter block`);
+    }
+    const [, frontmatterBlock, body] = match;
+    const { title, date, draft } = parseFrontmatter(frontmatterBlock);
 
-  return {
-    slug: filename.replace(/\.md$/, ""),
-    title,
-    date,
-    readingMinutes: estimateReadingMinutes(html),
-    html,
-  };
-});
+    if (draft === "true") {
+      skippedDrafts++;
+      return null;
+    }
+
+    const html = marked
+      .parse(body)
+      .replace(/src="images\//g, 'src="/posts/images/');
+
+    return {
+      slug: filename.replace(/\.md$/, ""),
+      title,
+      date,
+      readingMinutes: estimateReadingMinutes(html),
+      html,
+    };
+  })
+  .filter(Boolean);
 
 posts.sort((a, b) => (a.date < b.date ? 1 : -1));
 
 fs.writeFileSync("posts.json", JSON.stringify(posts) + "\n");
-console.log(`wrote posts.json: ${posts.length} post(s)`);
+console.log(
+  `wrote posts.json: ${posts.length} post(s), ${skippedDrafts} draft(s) skipped`,
+);

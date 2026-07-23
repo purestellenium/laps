@@ -190,101 +190,6 @@ body::before {
   }
 }
 
-/* custom cursor — a spinning reticle (4 corner wedges + a center cross)
-   built from clip-path'd spans, no cursor image involved. desktop/mouse
-   only: touch devices keep their native pointer untouched. */
-#cursor {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  width: 32px;
-  height: 32px;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition:
-    width 0.3s var(--ease),
-    height 0.3s var(--ease),
-    filter 0.3s var(--ease);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  body {
-    cursor: none;
-  }
-
-  a,
-  button {
-    cursor: none;
-  }
-
-  #cursor {
-    display: block;
-  }
-}
-
-/* rotation is driven entirely from app.js via requestAnimationFrame, not a
-   CSS animation — toggling a CSS animation on/off fast enough (rapid hovers
-   between links) hits browser-specific restart races that left it stuck at
-   the wrong angle; a single JS-owned angle value can't desync like that */
-#cursor-inner {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.cursor-corner {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background-color: var(--accent-bright);
-  clip-path: polygon(0 0, 100% 0, 0 100%);
-}
-
-.cursor-corner.tl {
-  top: 0;
-  left: 0;
-}
-
-.cursor-corner.tr {
-  top: 0;
-  right: 0;
-  transform: rotate(90deg);
-}
-
-.cursor-corner.br {
-  bottom: 0;
-  right: 0;
-  transform: rotate(180deg);
-}
-
-.cursor-corner.bl {
-  bottom: 0;
-  left: 0;
-  transform: rotate(270deg);
-}
-
-.cursor-center-h,
-.cursor-center-v {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  background-color: var(--accent-bright);
-  transform: translate(-50%, -50%);
-}
-
-.cursor-center-h {
-  width: 14px;
-  height: 4px;
-}
-
-.cursor-center-v {
-  width: 4px;
-  height: 14px;
-}
-
 .line.top {
   top: var(--frame-top);
   animation: wipeX 0.6s var(--ease) 0.1s forwards;
@@ -698,9 +603,6 @@ body::before {
   font-weight: 600;
 }
 
-/* links tab: .name is an <a>, wrapped in .name-col so the column-width
-   (for aligning .desc across rows) lives on a non-interactive parent
-   instead of stretching the link's own clickable/hoverable area */
 .index-list .name-col {
   flex: 0 0 auto;
   min-width: clamp(180px, calc(68px + 7vw), 250px);
