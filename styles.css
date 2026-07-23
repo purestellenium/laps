@@ -616,12 +616,7 @@ body::before {
 }
 
 .socials li {
-  display: flex;
-  align-items: center;
-  gap: clamp(8px, calc(1.6px + 0.4vw), 12px);
   margin-bottom: clamp(10px, calc(3.6px + 0.4vw), 14px);
-  color: var(--dim);
-  font-size: clamp(14px, calc(6px + 0.5vw), 19px);
 }
 
 .socials li span {
@@ -636,7 +631,7 @@ body::before {
   transition: color 0.2s var(--ease);
 }
 
-.socials li:has(a:hover) .icon {
+.socials a:hover .icon {
   color: var(--accent-bright);
 }
 
@@ -646,6 +641,9 @@ body::before {
 
 .socials a {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(8px, calc(1.6px + 0.4vw), 12px);
   color: var(--dim);
   font-size: clamp(14px, calc(6px + 0.5vw), 19px);
   text-decoration: none;
@@ -698,6 +696,18 @@ body::before {
   color: var(--text);
   font-size: clamp(16px, calc(6.4px + 0.6vw), 22px);
   font-weight: 600;
+}
+
+/* links tab: .name is an <a>, wrapped in .name-col so the column-width
+   (for aligning .desc across rows) lives on a non-interactive parent
+   instead of stretching the link's own clickable/hoverable area */
+.index-list .name-col {
+  flex: 0 0 auto;
+  min-width: clamp(180px, calc(68px + 7vw), 250px);
+}
+
+.index-list .name-col .name {
+  min-width: 0;
 }
 
 a.name {
@@ -1015,6 +1025,10 @@ a.action[href=""] {
   }
 
   .index-list .name {
+    min-width: 140px;
+  }
+
+  .index-list .name-col {
     min-width: 140px;
   }
 

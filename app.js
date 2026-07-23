@@ -109,7 +109,8 @@ if (shaEl) {
 
 document.querySelectorAll(".copy-email").forEach((el) => {
   const label = el.dataset.copy;
-  const original = el.textContent.trim();
+  const labelEl = el.querySelector(".copy-email-label") ?? el;
+  const original = labelEl.textContent.trim();
   let resetTimer;
 
   el.addEventListener("click", async (e) => {
@@ -127,11 +128,11 @@ document.querySelectorAll(".copy-email").forEach((el) => {
       ta.remove();
     }
 
-    el.textContent = "copied!";
+    labelEl.textContent = "copied!";
     el.classList.add("copied");
     clearTimeout(resetTimer);
     resetTimer = setTimeout(() => {
-      el.textContent = original;
+      labelEl.textContent = original;
       el.classList.remove("copied");
     }, 1400);
   });
