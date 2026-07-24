@@ -71,6 +71,81 @@ function estimateReadingMinutes(html) {
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 
+const SITE_URL = "https://stelle.codes";
+const FALLBACK_IMAGE = `${SITE_URL}/stelle-stationary.png`;
+const DESCRIPTION_WORD_LIMIT = 200;
+
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function extractDescription(html) {
+  const text = html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const words = text.split(" ");
+  if (words.length <= DESCRIPTION_WORD_LIMIT) return text;
+  return words.slice(0, DESCRIPTION_WORD_LIMIT).join(" ") + "...";
+}
+
+function extractFirstImage(html) {
+  const match = html.match(/<img[^>]*\ssrc="([^"]+)"/);
+  if (!match) return FALLBACK_IMAGE;
+  const src = match[1];
+  return src.startsWith("http") ? src : `${SITE_URL}${src}`;
+}
+
+// social/chat link-preview crawlers don't run JS, so they can't see anything
+// the SPA renders client-side from the #blog/<slug> hash. each post gets its
+// own static stub page instead, with real meta tags baked in at build time,
+// that redirects a human visitor into the SPA — blog links point here (see
+// app.js) so copying/sharing a link grabs this URL instead of the bare hash.
+function writeBlogStub(post) {
+  const title = escapeHtml(post.title);
+  // extractDescription pulls from post.html, which marked already
+  // HTML-escaped when it was rendered — escaping it again here would
+  // double-encode entities (e.g. "&#39;" becoming "&amp;#39;")
+  const description = extractDescription(post.html);
+  const image = extractFirstImage(post.html);
+  const hashUrl = `/#blog/${post.slug}`;
+
+  const html = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>${title} · stelle.codes</title>
+    <meta name="description" content="${description}" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="stelle.codes" />
+    <meta property="og:url" content="${SITE_URL}/blog/${post.slug}.html" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:image" content="${image}" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:description" content="${description}" />
+    <meta name="twitter:image" content="${image}" />
+
+    <meta http-equiv="refresh" content="0; url=${hashUrl}" />
+    <script>location.replace(${JSON.stringify(hashUrl)});</script>
+  </head>
+  <body>
+    <p>Redirecting to <a href="${hashUrl}">${title}</a>&hellip;</p>
+  </body>
+</html>
+`;
+
+  fs.mkdirSync("blog", { recursive: true });
+  fs.writeFileSync(path.join("blog", `${post.slug}.html`), html);
+}
+
 const postsDir = "posts";
 const postFiles = fs.existsSync(postsDir)
   ? fs.readdirSync(postsDir).filter((f) => f.endsWith(".md"))
@@ -102,9 +177,11 @@ const posts = postFiles.map((filename) => {
 });
 
 posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+posts.forEach(writeBlogStub);
 
 fs.writeFileSync("posts.json", JSON.stringify(posts) + "\n");
 const draftCount = posts.filter((p) => p.draft).length;
 console.log(
   `wrote posts.json: ${posts.length} post(s), ${draftCount} unlisted draft(s)`,
 );
+console.log(`wrote ${posts.length} blog/*.html preview stub(s)`);

@@ -206,7 +206,7 @@ function renderBlogList() {
       (post, i) => `
       <li>
         <span class="idx">${String(i + 1).padStart(2, "0")}</span>
-        <a class="name" href="#blog/${post.slug}" data-slug="${post.slug}">${post.title}</a>
+        <a class="name" href="/blog/${post.slug}.html" data-slug="${post.slug}">${post.title}</a>
         <span class="desc">${formatPostDate(post.date)} · ${post.readingMinutes} min read</span>
       </li>`,
     )
