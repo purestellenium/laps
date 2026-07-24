@@ -66,7 +66,7 @@ After a short bit of panic, contacting our parents, getting our parents to conta
 
 The hotel we land on is a bit far from the city, but it's extremely nice... the beds are big and comfy, the room is large and spacious, and there are PLATES. And a dishwasher!
 
-<img class="img-caption" src="images/hotel-room.JPG" alt="Me and Max 1mon making stupid YouTube thumbnail faces in awe of our hotel room" style="max-width: 750px;" />
+<img class="img-caption" src="images/hotel-room.jpg" alt="Me and Max 1mon making stupid YouTube thumbnail faces in awe of our hotel room" style="max-width: 750px;" />
 
 We're both pretty hungry, so we decide to get Dave's Hot Chicken delivered to our hotel. 1AM Dave's Hot Chicken HITS.
 
