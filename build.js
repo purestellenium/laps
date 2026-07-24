@@ -73,7 +73,7 @@ function estimateReadingMinutes(html) {
 
 const SITE_URL = "https://stelle.codes";
 const FALLBACK_IMAGE = `${SITE_URL}/stelle-stationary.png`;
-const DESCRIPTION_WORD_LIMIT = 200;
+const DESCRIPTION_CHAR_LIMIT = 200;
 
 function escapeHtml(str) {
   return str
@@ -88,9 +88,12 @@ function extractDescription(html) {
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-  const words = text.split(" ");
-  if (words.length <= DESCRIPTION_WORD_LIMIT) return text;
-  return words.slice(0, DESCRIPTION_WORD_LIMIT).join(" ") + "...";
+  if (text.length <= DESCRIPTION_CHAR_LIMIT) return text;
+  const truncated = text.slice(0, DESCRIPTION_CHAR_LIMIT);
+  const lastSpace = truncated.lastIndexOf(" ");
+  const trimmed = (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated)
+    .replace(/[.\s]+$/, "");
+  return trimmed + "...";
 }
 
 function extractFirstImage(html) {

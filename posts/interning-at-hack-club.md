@@ -6,7 +6,7 @@ draft: true
 
 ![A group picture of the 2026 Hack Club interns, taken on the bridge at HQ](images/group-pic-internship.png)
 
-> Dedicated to Ivie, Max, Kat, Jenin, Safia, Dhyan, Candy, Matthew, Shurui, Lynn, Ian, and everybody else I had the absolute pleasure of at HQ. Thank you for making this the most special summer ever. Although our time together may be over now, I'll never forget all the late nights we spent in the lounge, on the couches in front of the TV, or in a little dimly-lit corner outside on the Champlain College campus. I have so much love for all of you, and I hope to see you all soon :)
+> Dedicated to Ivie, Max, Kat, Jenin, Safia, Dhyan, Candy, Matthew, Shurui, Lynn, Ian, Tanishq, and everybody else I had the absolute pleasure of at HQ. Thank you for making this the most special summer ever. Although our time together may be over now, I'll never forget all the late nights we spent in the lounge, on the couches in front of the TV, or in a little dimly-lit corner outside on the Champlain College campus. I have so much love for all of you, and I hope to see you all soon :)
 
 It's March 27th, 2026, and I've just gotten home from getting dinner with my dad after a long day of school. The day has been a blur - although I have been trying my best to pay attention in my classes, my mind can only think of one thing: will I get accepted to the Hack Club internship?
 
