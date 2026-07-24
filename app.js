@@ -18,11 +18,20 @@ const tabs = [...document.querySelectorAll(".tabs a")];
 const panels = [...document.querySelectorAll(".panel")];
 const byTab = (name) => panels.find((p) => p.dataset.tab === name);
 
+function currentRoute() {
+  const postMatch = location.pathname.match(/^\/blog\/([^/]+)\.html$/);
+  if (postMatch) {
+    return { tab: "blog", slug: postMatch[1] };
+  }
+  const [tab, slug] = location.hash.slice(1).split("/");
+  return { tab, slug };
+}
+
 const SLIDE_MS = 500;
 let current = 0;
 let animating = false;
 
-const [hashTabName] = location.hash.slice(1).split("/");
+const { tab: hashTabName } = currentRoute();
 const hashTab = tabs.findIndex((t) => t.dataset.tab === hashTabName);
 if (hashTab > 0) {
   tabs[current].classList.remove("active");
@@ -74,7 +83,7 @@ function switchTo(next, forcedDir, { pushHistory = true } = {}) {
   current = next;
 
   if (pushHistory) {
-    history.pushState(null, "", `#${tabs[next].dataset.tab}`);
+    history.pushState(null, "", `/#${tabs[next].dataset.tab}`);
   }
 
   setTimeout(() => {
@@ -99,7 +108,7 @@ document.querySelectorAll(".tab-arrow").forEach((btn) => {
 
 window.addEventListener("popstate", () => {
   if (animating) return;
-  const [hashTabName, slug] = location.hash.slice(1).split("/");
+  const { tab: hashTabName, slug } = currentRoute();
   const targetIndex = tabs.findIndex((t) => t.dataset.tab === hashTabName);
   if (targetIndex === -1) return;
 
@@ -222,11 +231,15 @@ function fillBlogPost(post) {
   document.title = `${post.title} · ${DEFAULT_TITLE}`;
 }
 
+function blogPostUrl(slug) {
+  return `/blog/${slug}.html`;
+}
+
 function showBlogListInstant() {
   if (blogListEl) blogListEl.hidden = false;
   if (blogPostEl) blogPostEl.hidden = true;
   document.title = DEFAULT_TITLE;
-  history.replaceState(null, "", "#blog");
+  history.replaceState(null, "", "/#blog");
 }
 
 function showBlogPostInstant(slug) {
@@ -238,7 +251,7 @@ function showBlogPostInstant(slug) {
   fillBlogPost(post);
   if (blogListEl) blogListEl.hidden = true;
   blogPostEl.hidden = false;
-  history.replaceState(null, "", `#blog/${slug}`);
+  history.replaceState(null, "", blogPostUrl(slug));
 }
 
 const BLOG_FADE_MS = 220;
@@ -268,7 +281,7 @@ function renderBlogPostView(post) {
 
 function showBlogList() {
   renderBlogListView();
-  history.replaceState(null, "", "#blog");
+  history.replaceState(null, "", "/#blog");
 }
 
 let blogHasHistoryEntry = false;
@@ -280,7 +293,7 @@ function showBlogPost(slug) {
     return;
   }
   renderBlogPostView(post);
-  history.pushState({ blogSlug: slug }, "", `#blog/${slug}`);
+  history.pushState({ blogSlug: slug }, "", blogPostUrl(slug));
   blogHasHistoryEntry = true;
 }
 
@@ -305,7 +318,7 @@ fetch("/posts.json", { cache: "no-store" })
   .then((data) => {
     posts = data;
     renderBlogList();
-    const [tabName, slug] = location.hash.slice(1).split("/");
+    const { tab: tabName, slug } = currentRoute();
     if (tabName === "blog" && slug) showBlogPostInstant(slug);
   })
   .catch(() => {
