@@ -46,8 +46,10 @@ tabs.forEach((tab, i) => {
   });
 });
 
-function switchTo(next, forcedDir) {
+function switchTo(next, forcedDir, { pushHistory = true } = {}) {
   animating = true;
+
+  document.title = DEFAULT_TITLE;
 
   const dir = forcedDir ?? (next > current ? 1 : -1);
   const incoming = byTab(tabs[next].dataset.tab);
@@ -71,7 +73,9 @@ function switchTo(next, forcedDir) {
   tabs[next].classList.add("active");
   current = next;
 
-  history.replaceState(null, "", `#${tabs[next].dataset.tab}`);
+  if (pushHistory) {
+    history.pushState(null, "", `#${tabs[next].dataset.tab}`);
+  }
 
   setTimeout(() => {
     outgoing.style.transition = "none";
@@ -91,6 +95,36 @@ document.querySelectorAll(".tab-arrow").forEach((btn) => {
     switchTo(next, dir);
     if (tabs[next].dataset.tab === "blog") showBlogListInstant();
   });
+});
+
+window.addEventListener("popstate", () => {
+  if (animating) return;
+  const [hashTabName, slug] = location.hash.slice(1).split("/");
+  const targetIndex = tabs.findIndex((t) => t.dataset.tab === hashTabName);
+  if (targetIndex === -1) return;
+
+  const switchingTabs = targetIndex !== current;
+  if (switchingTabs) {
+    switchTo(targetIndex, undefined, { pushHistory: false });
+  }
+
+  if (hashTabName !== "blog") return;
+
+  if (switchingTabs) {
+    if (slug) {
+      showBlogPostInstant(slug);
+    } else {
+      showBlogListInstant();
+    }
+    return;
+  }
+
+  const post = slug ? posts.find((p) => p.slug === slug) : null;
+  if (post) {
+    renderBlogPostView(post);
+  } else {
+    renderBlogListView();
+  }
 });
 
 const shaEl = document.getElementById("commit-sha");
@@ -158,7 +192,8 @@ function formatPostDate(iso) {
 
 function renderBlogList() {
   if (!blogListEl) return;
-  if (!posts.length) {
+  const listed = posts.filter((post) => !post.draft);
+  if (!listed.length) {
     blogListEl.innerHTML = `
       <div class="coming-soon">
         <p class="coming-soon-title">no posts yet</p>
@@ -166,7 +201,7 @@ function renderBlogList() {
       </div>`;
     return;
   }
-  blogListEl.innerHTML = `<ul class="index-list">${posts
+  blogListEl.innerHTML = `<ul class="index-list">${listed
     .map(
       (post, i) => `
       <li>
@@ -178,15 +213,19 @@ function renderBlogList() {
     .join("")}</ul>`;
 }
 
+const DEFAULT_TITLE = document.title;
+
 function fillBlogPost(post) {
   blogTitleEl.textContent = post.title;
   blogMetaEl.textContent = `${formatPostDate(post.date)} · ${post.readingMinutes} min read`;
   blogBodyEl.innerHTML = post.html;
+  document.title = `${post.title} · ${DEFAULT_TITLE}`;
 }
 
 function showBlogListInstant() {
   if (blogListEl) blogListEl.hidden = false;
   if (blogPostEl) blogPostEl.hidden = true;
+  document.title = DEFAULT_TITLE;
   history.replaceState(null, "", "#blog");
 }
 
@@ -217,10 +256,22 @@ function crossfadeBlog(hideEl, showEl) {
   }, BLOG_FADE_MS);
 }
 
-function showBlogList() {
-  history.replaceState(null, "", "#blog");
+function renderBlogListView() {
+  document.title = DEFAULT_TITLE;
   crossfadeBlog(blogPostEl, blogListEl);
 }
+
+function renderBlogPostView(post) {
+  fillBlogPost(post);
+  crossfadeBlog(blogListEl, blogPostEl);
+}
+
+function showBlogList() {
+  renderBlogListView();
+  history.replaceState(null, "", "#blog");
+}
+
+let blogHasHistoryEntry = false;
 
 function showBlogPost(slug) {
   const post = posts.find((p) => p.slug === slug);
@@ -228,9 +279,9 @@ function showBlogPost(slug) {
     showBlogList();
     return;
   }
-  fillBlogPost(post);
-  history.replaceState(null, "", `#blog/${slug}`);
-  crossfadeBlog(blogListEl, blogPostEl);
+  renderBlogPostView(post);
+  history.pushState({ blogSlug: slug }, "", `#blog/${slug}`);
+  blogHasHistoryEntry = true;
 }
 
 blogListEl?.addEventListener("click", (e) => {
@@ -242,7 +293,11 @@ blogListEl?.addEventListener("click", (e) => {
 
 blogBackEl?.addEventListener("click", (e) => {
   e.preventDefault();
-  showBlogList();
+  if (blogHasHistoryEntry) {
+    history.back();
+  } else {
+    showBlogList();
+  }
 });
 
 fetch("/posts.json", { cache: "no-store" })
