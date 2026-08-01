@@ -6,7 +6,7 @@ draft: true
 
 Two years ago today, I joined Hack Club.
 
-It was August 1st, 2026; I was chilling in my grandparents' home in Vietnam, checking my email (as you do when you're bored), when I received a GitHub newsletter telling me about a program for teens called "Arcade." It was run by this nonprofit called Hack Club, and you could earn prizes like free iPads and YubiKeys... and all you had to do was code!
+It was August 1st, 2024; I was chilling in my grandparents' home in Vietnam, checking my email (as you do when you're bored), when I received a GitHub newsletter telling me about a program for teens called "Arcade." It was run by this nonprofit called Hack Club, and you could earn prizes like free iPads and YubiKeys... and all you had to do was code!
 
 I didn't have much better to do that summer, so I decided to join the program and see what was up. And so, I made some silly websites, a Sprig game, and I got my tickets to use in the shop. I even managed to convince Zach Latta to put the YubiKey on sale, so I could afford it.
 
