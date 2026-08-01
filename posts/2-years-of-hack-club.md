@@ -1,7 +1,6 @@
 ---
 title: 2 years of hack club
 date: 2026-08-01
-draft: true
 ---
 
 Two years ago today, I joined Hack Club.
