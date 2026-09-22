@@ -1,6 +1,6 @@
 ---
 title: interning at hack club (2026)
-date: 2026-07-23
+date: 2026-09-21
 ---
 
 ![A group picture of the 2026 Hack Club interns, taken on the bridge at HQ](images/group-pic-internship.png)
