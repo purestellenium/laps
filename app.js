@@ -181,6 +181,50 @@ document.querySelectorAll(".copy-email").forEach((el) => {
   });
 });
 
+const projectGridEl = document.getElementById("project-grid");
+
+function projectAction(href, icon, label) {
+  if (!href) return "";
+  return `
+    <a class="action" href="${href}" aria-label="${label}">
+      <svg class="action-icon" aria-hidden="true"><use href="#${icon}" /></svg>
+    </a>`;
+}
+
+function renderProjects(projects) {
+  if (!projectGridEl) return;
+  projectGridEl.innerHTML = projects
+    .map(
+      (project, i) => `
+      <article class="project-card">
+        <div class="project-thumb">
+          ${
+            project.thumb
+              ? `<img src="${project.thumb}" alt="${project.name} screenshot" loading="lazy" />`
+              : `<span class="project-thumb-empty">${project.name}</span>`
+          }
+        </div>
+        <div class="project-body">
+          <div class="project-head">
+            <span class="idx">${String(i + 1).padStart(2, "0")}</span>
+            <a class="name project-link" href="${project.live || project.source}">${project.name}</a>
+            <span class="actions">
+              ${projectAction(project.live, "i-live", `${project.name} live demo`)}
+              ${projectAction(project.source, "i-source", `${project.name} source code`)}
+            </span>
+          </div>
+          <p class="desc">${project.desc}</p>
+        </div>
+      </article>`,
+    )
+    .join("");
+}
+
+fetch("/projects.json", { cache: "no-store" })
+  .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+  .then(renderProjects)
+  .catch(() => renderProjects([]));
+
 const blogListEl = document.getElementById("blog-list");
 const blogPostEl = document.getElementById("blog-post");
 const blogTitleEl = blogPostEl?.querySelector(".blog-post-title");

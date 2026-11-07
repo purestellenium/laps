@@ -1,0 +1,58 @@
+[
+  {
+    "name": "memeity",
+    "desc": "a meme folder for the modern era - synced through google drive, with ocr search and tags to find the perfect one",
+    "thumb": "/projects/images/memeity.jpg",
+    "live": "https://memeity.stelle.codes",
+    "source": "https://github.com/purestellenium/memeity"
+  },
+  {
+    "name": "phantom",
+    "desc": "the platform for phantom, a Hack Club YSWS - build projects, earn fragments, and spend them on an invite to an escape room hackathon in philadelphia",
+    "thumb": "/projects/images/phantom.jpg",
+    "live": "https://phantom.hackclub.com",
+    "source": "https://github.com/purestellenium/phantom"
+  },
+  {
+    "name": "woas",
+    "desc": "\"it's just words on a screen.\" a domain-specific language for text-based games that compiles to a single standalone html5 file",
+    "thumb": "/projects/images/woas.png",
+    "live": "https://purestellenium.github.io/my-barista-girl/",
+    "source": "https://github.com/purestellenium/woas"
+  },
+  {
+    "name": "onekey",
+    "desc": "a Hack Club program - ship something using only one key",
+    "thumb": "/projects/images/onekey.png",
+    "live": "https://onekey.hackclub.com/",
+    "source": "https://github.com/hackclub/onekey"
+  },
+  {
+    "name": "fishsol-macro",
+    "desc": "the definitive auto-fishing macro for sol's rng",
+    "thumb": "/projects/images/fishsol-macro.jpg",
+    "live": "https://github.com/ivelchampion249/FishSol-Macro/releases",
+    "source": "https://github.com/ivelchampion249/FishSol-Macro"
+  },
+  {
+    "name": "biome-macro",
+    "desc": "the first logs-based biome detector for sol's rng",
+    "thumb": "",
+    "live": "https://github.com/purestellenium/maxstellar-Biome-Macro/releases",
+    "source": "https://github.com/purestellenium/maxstellar-Biome-Macro"
+  },
+  {
+    "name": "roughsketches",
+    "desc": "a visual novel built in 4 days about grief and second chances",
+    "thumb": "/projects/images/roughsketches.png",
+    "live": "https://stellenium.itch.io/rough-sketches",
+    "source": "https://github.com/purestellenium/RoughSketches"
+  },
+  {
+    "name": "shutter",
+    "desc": "a daily photo journal for Hack Club interns - answer the day's prompt, keep your streak alive, and like your favorite shots to send them to the top",
+    "thumb": "/projects/images/shutter.jpg",
+    "live": "",
+    "source": "https://github.com/purestellenium/shutter"
+  }
+]
