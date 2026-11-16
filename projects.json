@@ -14,8 +14,22 @@
     "source": "https://github.com/purestellenium/phantom"
   },
   {
-    "name": "woas",
-    "desc": "\"it's just words on a screen.\" a domain-specific language for text-based games that compiles to a single standalone html5 file",
+    "name": "jensen-huang-simulator",
+    "desc": "you are jensen huang, NVIDIA CEO. you are very rich, and you own many leather jackets. your goal: have as many affairs as possible, while staying wary of the FBI and your profit-chasing board.",
+    "thumb": "/projects/images/jensen-huang-simulator.png",
+    "live": "https://jensen.stelle.codes",
+    "source": "https://github.com/purestellenium/jensen-huang-simulator"
+  },
+  {
+    "name": "roughsketches",
+    "desc": "a hand-drawn visual novel built in 4 days about a kid's first day at school. told through the pages of a fifth-grader's sketchbook, their doodles reveal truths about grief and second chances.",
+    "thumb": "/projects/images/roughsketches.png",
+    "live": "https://stellenium.itch.io/rough-sketches",
+    "source": "https://github.com/purestellenium/RoughSketches"
+  },
+  {
+    "name": "woas (words on a screen)",
+    "desc": "a simple domain-specific language for text-based games that compiles to a single standalone html5 file",
     "thumb": "/projects/images/woas.png",
     "live": "https://purestellenium.github.io/my-barista-girl/",
     "source": "https://github.com/purestellenium/woas"
@@ -40,19 +54,5 @@
     "thumb": "",
     "live": "https://github.com/purestellenium/maxstellar-Biome-Macro/releases",
     "source": "https://github.com/purestellenium/maxstellar-Biome-Macro"
-  },
-  {
-    "name": "roughsketches",
-    "desc": "a visual novel built in 4 days about grief and second chances",
-    "thumb": "/projects/images/roughsketches.png",
-    "live": "https://stellenium.itch.io/rough-sketches",
-    "source": "https://github.com/purestellenium/RoughSketches"
-  },
-  {
-    "name": "shutter",
-    "desc": "a daily photo journal for Hack Club interns - answer the day's prompt, keep your streak alive, and like your favorite shots to send them to the top",
-    "thumb": "/projects/images/shutter.jpg",
-    "live": "",
-    "source": "https://github.com/purestellenium/shutter"
   }
 ]
